@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Demo jQuery - jQueryUI - CouchDB</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="estilos.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  </head>
+  <body>
+    <h1>Taller 4</h1>
+      <h2>Punto 1</h2>
+        <div id="t1">
+          <p id="mensajeFinal"></p>
+          <button id="obtenerTodo" type="submit">all información</button>
+        </div>
+        <h2>Punto 2</h2>
+        <div id="t2">
+            <label for="canton">Ingresar el Canton a buscar:</label>
+            <input type="text" name="canton" id="canton" placeholder="Ingrese el Canton a buscar"><br>
+            <p id="mensajeFinal2"></p>
+            <button id="obtenerBusqueda" type="submit">buscar por cantón</button>
+        </div>
+        <h2>Punto 3</h2>
+        <div id="t3">
+            <label for="numero">Numero de Instituciones:</label>
+            <input type="text" name="numero" id="numero" placeholder="Ingresar el Numero de Instituciones a Mostrar"><br>
+            <p id="mensajeFinal3"></p>
+            <button id="obtenerNumero" type="submit">buscar por límite</button>
+        </div>
+  </body>
+  <script>
+    $(document).ready(function() {
+      $("#pestanias").tabs();
+      $( "#obtenerTodo" ).click(function() {
+        $.ajax({
+              dataType: 'json',
+              url: "http://127.0.0.1:5984/instituciones/_design/primero/_view/vista001?include_docs=true"
+              }).then(function(data) {
+                console.log(data);
+                var table = "<table><tr><th>Nombre Institucion</th><th>Provincia</th><th>Canton</th><th>Parroquia</th></tr>";
+                for(var i=0; i<data.rows.length; i++){
+                  var nombreIntitucion = data.rows[i].doc.Nombre_Institucion;
+                  var provincia = data.rows[i].doc.Provincia;
+                  var canton = data.rows[i].doc.Canton;
+                  var parroquia = data.rows[i].doc.Parroquia;
+                  table += "<tr><td>" + nombreIntitucion + "</td><td>" + provincia + "</td><td>"+ canton + "</td><td>"+ parroquia +"</td></tr>";
+                }
+                table += "</table>";
+                $('#mensajeFinal').append(table)
+              });
+      });
+    });
+  </script>
+
+<script>
+    $(document).ready(function() {
+      $("#pestanias").tabs();
+      $( "#obtenerBusqueda" ).click(function() {
+        var parametroDeBusqueda = $("#canton").val();
+        var urlbusqueda = 'http://127.0.0.1:5984/instituciones/_design/primero/_view/vista001?key="'+parametroDeBusqueda+'"&include_docs=true';
+        $.ajax({
+              dataType: 'json',
+              url: urlbusqueda
+              }).then(function(data) {
+                console.log(data);
+                var table = "<table><tr><th>Nombre Institucion</th><th>Provincia</th><th>Canton</th><th>Parroquia</th></tr>";
+                for(var i=0; i<data.rows.length; i++){
+                  var nombreIntitucion = data.rows[i].doc.Nombre_Institucion;
+                  var provincia = data.rows[i].doc.Provincia;
+                  var canton = data.rows[i].doc.Canton;
+                  var parroquia = data.rows[i].doc.Parroquia;
+                  table += "<tr><td>" + nombreIntitucion + "</td><td>" + provincia + "</td><td>"+ canton + "</td><td>"+ parroquia +"</td></tr>";
+                }
+                table += "</table>";
+                $('#mensajeFinal2').append(table)
+              });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+      $("#pestanias").tabs();
+      $( "#obtenerNumero" ).click(function() {
+        var numeroBusqueda = $("#numero").val();
+        var urlbusqueda = 'http://127.0.0.1:5984/instituciones/_design/primero/_view/vista001?limit='+numeroBusqueda+'&include_docs=true';
+        $.ajax({
+              dataType: 'json',
+              url: urlbusqueda
+              }).then(function(data) {
+                console.log(data);
+                var table = "<table><tr><th>Nombre Institucion</th><th>Provincia</th><th>Canton</th><th>Parroquia</th></tr>";
+                for(var i=0; i<data.rows.length; i++){
+                  var nombreIntitucion = data.rows[i].doc.Nombre_Institucion;
+                  var provincia = data.rows[i].doc.Provincia;
+                  var canton = data.rows[i].doc.Canton;
+                  var parroquia = data.rows[i].doc.Parroquia;
+                  table += "<tr><td>" + nombreIntitucion + "</td><td>" + provincia + "</td><td>"+ canton + "</td><td>"+ parroquia +"</td></tr>";
+                }
+                table += "</table>";
+                $('#mensajeFinal3').append(table)
+              });
+      });
+    });
+  </script>
+</html>
+
+        
+        
